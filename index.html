@@ -381,7 +381,7 @@
   // --- Core ---
   async function handleFile(file) {
     reset(false);
-    originalPdfBytes = await file.arrayBuffer();
+originalPdfBytes = new Uint8Array(await file.arrayBuffer());
     showProgress(true);
     setProgress(0, 'Leyendo PDF...');
 
