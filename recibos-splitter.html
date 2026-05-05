@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Divisor de Recibos de Sueldo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px;
+      width: 100%;
+      max-width: 680px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      font-size: 0.9rem;
+      margin-bottom: 32px;
+    }
+
+    /* Drop zone */
+    .drop-zone {
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #6366f1;
+      background: #f5f3ff;
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    .drop-label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 4px;
+    }
+
+    .drop-hint {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    /* Progress */
+    .progress-section {
+      margin-top: 28px;
+      display: none;
+    }
+
+    .progress-section.visible { display: block; }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: #374151;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .progress-bar-track {
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366f1, #818cf8);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .progress-status {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 6px;
+    }
+
+    /* Results */
+    .results-section {
+      margin-top: 28px;
+      display: none;
+    }
+
+    .results-section.visible { display: block; }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .results-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111;
+    }
+
+    .badge {
+      background: #ede9fe;
+      color: #5b21b6;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 10px;
+      border-radius: 99px;
+    }
+
+    .collaborator-list {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .collaborator-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 0.875rem;
+    }
+
+    .collaborator-item:last-child { border-bottom: none; }
+    .collaborator-item:nth-child(even) { background: #fafafa; }
+
+    .collaborator-dni {
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      color: #111;
+      font-size: 0.9rem;
+    }
+
+    .collaborator-pages {
+      color: #6b7280;
+      font-size: 0.8rem;
+    }
+
+    .collaborator-check {
+      color: #10b981;
+      font-size: 1rem;
+    }
+
+    /* Error list */
+    .error-section {
+      margin-top: 16px;
+      display: none;
+    }
+
+    .error-section.visible { display: block; }
+
+    .error-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .error-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #dc2626;
+      margin-bottom: 6px;
+    }
+
+    .error-list {
+      list-style: none;
+      font-size: 0.8rem;
+      color: #b91c1c;
+    }
+
+    .error-list li::before {
+      content: '• ';
+    }
+
+    /* Buttons */
+    .actions {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-primary {
+      background: #6366f1;
+      color: #fff;
+    }
+
+    .btn-primary:hover:not(:disabled) { background: #4f46e5; }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #e5e7eb;
+    }
+
+    .btn-secondary:hover:not(:disabled) { background: #e5e7eb; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+
+    .spinner.visible { display: block; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>Divisor de Recibos de Sueldo</h1>
+  <p class="subtitle">Sube un PDF con múltiples recibos y obtén un archivo por colaborador, agrupados por DNI.</p>
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" accept="application/pdf" id="fileInput" />
+    <div class="drop-icon">📄</div>
+    <div class="drop-label">Arrastrá el PDF acá o hacé clic para buscarlo</div>
+    <div class="drop-hint">Solo archivos PDF</div>
+  </div>
+
+  <div class="progress-section" id="progressSection">
+    <div class="progress-label">
+      <span id="progressText">Procesando...</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-track">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-status" id="progressStatus"></div>
+  </div>
+
+  <div class="results-section" id="resultsSection">
+    <div class="results-header">
+      <div class="results-title">Colaboradores detectados</div>
+      <div class="badge" id="countBadge">0</div>
+    </div>
+    <div class="collaborator-list" id="collaboratorList"></div>
+
+    <div class="error-section" id="errorSection">
+      <div class="error-box">
+        <div class="error-title">⚠️ Páginas sin DNI detectado</div>
+        <ul class="error-list" id="errorList"></ul>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" id="downloadBtn">
+        <span class="spinner" id="dlSpinner"></span>
+        <span id="downloadBtnLabel">⬇️ Descargar ZIP</span>
+      </button>
+      <button class="btn btn-secondary" id="resetBtn">Procesar otro PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // PDF.js worker
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  // Patrones en orden de prioridad.
+  // IMPORTANTE: no usar CUIT (sin L) porque matchea el CUIT de la empresa.
+  // Usar CUIL (con L) que identifica al empleado.
+  const DNI_PATTERNS = [
+    /\bDNI\s+(\d{7,8})\b/,          // "DNI 31405296"
+    /\bCUIL:?\s+\d{2}-(\d{7,8})-\d\b/, // "CUIL: 20-31405296-0"
+  ];
+
+  // --- DOM refs ---
+  const dropZone     = document.getElementById('dropZone');
+  const fileInput    = document.getElementById('fileInput');
+  const progressSec  = document.getElementById('progressSection');
+  const progressText = document.getElementById('progressText');
+  const progressPct  = document.getElementById('progressPct');
+  const progressFill = document.getElementById('progressFill');
+  const progressStat = document.getElementById('progressStatus');
+  const resultsSec   = document.getElementById('resultsSection');
+  const countBadge   = document.getElementById('countBadge');
+  const collabList   = document.getElementById('collaboratorList');
+  const errorSec     = document.getElementById('errorSection');
+  const errorList    = document.getElementById('errorList');
+  const downloadBtn  = document.getElementById('downloadBtn');
+  const downloadLbl  = document.getElementById('downloadBtnLabel');
+  const dlSpinner    = document.getElementById('dlSpinner');
+  const resetBtn     = document.getElementById('resetBtn');
+
+  // State
+  let originalPdfBytes = null;
+  let dniMap = {};          // dni -> [pageIndexes (0-based)]
+  let undetectedPages = []; // 1-based page numbers without DNI
+
+  // --- Drag & drop ---
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type === 'application/pdf') handleFile(file);
+    else alert('Por favor sube un archivo PDF.');
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) handleFile(fileInput.files[0]);
+  });
+
+  resetBtn.addEventListener('click', reset);
+
+  downloadBtn.addEventListener('click', generateAndDownloadZip);
+
+  // --- Core ---
+  async function handleFile(file) {
+    reset(false);
+    originalPdfBytes = await file.arrayBuffer();
+    showProgress(true);
+    setProgress(0, `Leyendo PDF...`);
+
+    let pdfDoc;
+    try {
+      pdfDoc = await pdfjsLib.getDocument({ data: originalPdfBytes }).promise;
+    } catch(e) {
+      alert('No se pudo leer el PDF. Asegurate de que no esté protegido con contraseña.');
+      showProgress(false);
+      return;
+    }
+
+    const totalPages = pdfDoc.numPages;
+    dniMap = {};
+    undetectedPages = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+      setProgress(
+        Math.round((i / totalPages) * 80),
+        `Analizando página ${i} de ${totalPages}...`
+      );
+
+      const page = await pdfDoc.getPage(i);
+      const textContent = await page.getTextContent();
+      // Concatenar todo el texto de la página — evita errores por Y ligeramente distintas
+      const pageText = textContent.items.map(it => it.str).join(' ');
+      const dni = extractDni(pageText);
+
+      if (dni) {
+        if (!dniMap[dni]) dniMap[dni] = [];
+        dniMap[dni].push(i - 1); // 0-based for pdf-lib
+      } else {
+        undetectedPages.push(i);
+      }
+    }
+
+    setProgress(90, 'Organizando resultados...');
+    renderResults();
+    setProgress(100, 'Listo.');
+
+    setTimeout(() => {
+      showProgress(false);
+      resultsSec.classList.add('visible');
+    }, 400);
+  }
+
+  function extractDni(text) {
+    for (const pattern of DNI_PATTERNS) {
+      const m = text.match(pattern);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  function renderResults() {
+    const dnis = Object.keys(dniMap).sort();
+    countBadge.textContent = dnis.length;
+    collabList.innerHTML = '';
+
+    for (const dni of dnis) {
+      const pages = dniMap[dni];
+      const item = document.createElement('div');
+      item.className = 'collaborator-item';
+      item.innerHTML = `
+        <span class="collaborator-dni">${dni}</span>
+        <span class="collaborator-pages">${pages.length} página${pages.length !== 1 ? 's' : ''}</span>
+        <span class="collaborator-check">✓</span>
+      `;
+      collabList.appendChild(item);
+    }
+
+    if (undetectedPages.length > 0) {
+      errorSec.classList.add('visible');
+      errorList.innerHTML = undetectedPages
+        .map(p => `<li>Página ${p}: no se encontró CUIT</li>`)
+        .join('');
+    }
+  }
+
+  async function generateAndDownloadZip() {
+    downloadBtn.disabled = true;
+    dlSpinner.classList.add('visible');
+    downloadLbl.textContent = 'Generando ZIP...';
+
+    try {
+      // Load original with pdf-lib
+      const { PDFDocument } = PDFLib;
+      const srcDoc = await PDFDocument.load(originalPdfBytes);
+
+      const zip = new JSZip();
+      const dnis = Object.keys(dniMap).sort();
+
+      for (let i = 0; i < dnis.length; i++) {
+        const dni = dnis[i];
+        const pageIdxs = dniMap[dni];
+
+        downloadLbl.textContent = `Generando ${i + 1} / ${dnis.length}...`;
+
+        const newDoc = await PDFDocument.create();
+        const copied = await newDoc.copyPages(srcDoc, pageIdxs);
+        for (const page of copied) newDoc.addPage(page);
+
+        const pdfBytes = await newDoc.save();
+        zip.file(`${dni}.pdf`, pdfBytes);
+      }
+
+      downloadLbl.textContent = 'Comprimiendo...';
+      const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'recibos.zip';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+
+      downloadLbl.textContent = '✅ ZIP descargado';
+    } catch(e) {
+      console.error(e);
+      alert('Error al generar el ZIP: ' + e.message);
+      downloadLbl.textContent = '⬇️ Descargar ZIP';
+    } finally {
+      dlSpinner.classList.remove('visible');
+      downloadBtn.disabled = false;
+    }
+  }
+
+  function setProgress(pct, status) {
+    progressFill.style.width = pct + '%';
+    progressPct.textContent = pct + '%';
+    if (status) progressStat.textContent = status;
+  }
+
+  function showProgress(show) {
+    progressSec.classList.toggle('visible', show);
+    if (show) {
+      progressText.textContent = 'Procesando PDF...';
+      setProgress(0, '');
+    }
+  }
+
+  function reset(showDropZone = true) {
+    dniMap = {};
+    undetectedPages = [];
+    originalPdfBytes = null;
+    collabList.innerHTML = '';
+    errorList.innerHTML = '';
+    errorSec.classList.remove('visible');
+    resultsSec.classList.remove('visible');
+    showProgress(false);
+    downloadLbl.textContent = '⬇️ Descargar ZIP';
+    downloadBtn.disabled = false;
+    dlSpinner.classList.remove('visible');
+    if (showDropZone) fileInput.value = '';
+  }
+</script>
+</body>
+</html>
