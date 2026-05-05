@@ -327,12 +327,9 @@
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Patrones en orden de prioridad.
-  // IMPORTANTE: no usar CUIT (sin L) porque matchea el CUIT de la empresa.
-  // Usar CUIL (con L) que identifica al empleado.
   const DNI_PATTERNS = [
-    /\bDNI\s+(\d{7,8})\b/,          // "DNI 31405296"
-    /\bCUIL:?\s+\d{2}-(\d{7,8})-\d\b/, // "CUIL: 20-31405296-0"
+    /\bDNI\s+(\d{7,8})\b/,
+    /\bCUIL:?\s+\d{2}-(\d{7,8})-\d\b/,
   ];
 
   // --- DOM refs ---
@@ -355,8 +352,8 @@
 
   // State
   let originalPdfBytes = null;
-  let dniMap = {};          // dni -> [pageIndexes (0-based)]
-  let undetectedPages = []; // 1-based page numbers without DNI
+  let dniMap = {};
+  let undetectedPages = [];
 
   // --- Drag & drop ---
   dropZone.addEventListener('dragover', e => {
@@ -379,7 +376,6 @@
   });
 
   resetBtn.addEventListener('click', reset);
-
   downloadBtn.addEventListener('click', generateAndDownloadZip);
 
   // --- Core ---
@@ -387,11 +383,12 @@
     reset(false);
     originalPdfBytes = await file.arrayBuffer();
     showProgress(true);
-    setProgress(0, `Leyendo PDF...`);
+    setProgress(0, 'Leyendo PDF...');
 
     let pdfDoc;
     try {
-      pdfDoc = await pdfjsLib.getDocument({ data: originalPdfBytes }).promise;
+      // .slice(0) hace una copia del buffer para que pdf.js no lo consuma
+      pdfDoc = await pdfjsLib.getDocument({ data: originalPdfBytes.slice(0) }).promise;
     } catch(e) {
       alert('No se pudo leer el PDF. Asegurate de que no esté protegido con contraseña.');
       showProgress(false);
@@ -410,7 +407,6 @@
 
       const page = await pdfDoc.getPage(i);
       const textContent = await page.getTextContent();
-      // Concatenar todo el texto de la página — evita errores por Y ligeramente distintas
       const pageText = textContent.items.map(it => it.str).join(' ');
       const dni = extractDni(pageText);
 
@@ -460,7 +456,7 @@
     if (undetectedPages.length > 0) {
       errorSec.classList.add('visible');
       errorList.innerHTML = undetectedPages
-        .map(p => `<li>Página ${p}: no se encontró CUIT</li>`)
+        .map(p => `<li>Página ${p}: no se encontró DNI</li>`)
         .join('');
     }
   }
@@ -471,8 +467,8 @@
     downloadLbl.textContent = 'Generando ZIP...';
 
     try {
-      // Load original with pdf-lib
       const { PDFDocument } = PDFLib;
+      // Usar el buffer original intacto (pdf.js usó una copia)
       const srcDoc = await PDFDocument.load(originalPdfBytes);
 
       const zip = new JSZip();
