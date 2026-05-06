@@ -29,20 +29,9 @@
       max-width: 680px;
     }
 
-    h1 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #111;
-      margin-bottom: 6px;
-    }
+    h1 { font-size: 1.5rem; font-weight: 700; color: #111; margin-bottom: 6px; }
+    .subtitle { color: #6b7280; font-size: 0.9rem; margin-bottom: 32px; }
 
-    .subtitle {
-      color: #6b7280;
-      font-size: 0.9rem;
-      margin-bottom: 32px;
-    }
-
-    /* Drop zone */
     .drop-zone {
       border: 2px dashed #d1d5db;
       border-radius: 12px;
@@ -52,226 +41,99 @@
       transition: border-color 0.2s, background 0.2s;
       position: relative;
     }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: #6366f1; background: #f5f3ff; }
+    .drop-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .drop-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .drop-label { font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 4px; }
+    .drop-hint { font-size: 0.8rem; color: #9ca3af; }
 
-    .drop-zone:hover, .drop-zone.drag-over {
-      border-color: #6366f1;
-      background: #f5f3ff;
-    }
-
-    .drop-zone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-    }
-
-    .drop-icon {
-      font-size: 2.5rem;
-      margin-bottom: 12px;
-    }
-
-    .drop-label {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #374151;
-      margin-bottom: 4px;
-    }
-
-    .drop-hint {
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-    /* Progress */
-    .progress-section {
-      margin-top: 28px;
-      display: none;
-    }
-
-    .progress-section.visible { display: block; }
-
-    .progress-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: #374151;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-
-    .progress-bar-track {
-      height: 8px;
-      background: #e5e7eb;
-      border-radius: 99px;
-      overflow: hidden;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #6366f1, #818cf8);
-      border-radius: 99px;
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-
-    .progress-status {
-      font-size: 0.8rem;
-      color: #6b7280;
-      margin-top: 6px;
-    }
-
-    /* Results */
-    .results-section {
-      margin-top: 28px;
-      display: none;
-    }
-
-    .results-section.visible { display: block; }
-
-    .results-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .results-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #111;
-    }
-
-    .badge {
-      background: #ede9fe;
-      color: #5b21b6;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 2px 10px;
-      border-radius: 99px;
-    }
-
-    .collaborator-list {
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-      overflow: hidden;
-      max-height: 320px;
-      overflow-y: auto;
-    }
-
-    .collaborator-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
-      border-bottom: 1px solid #f3f4f6;
-      font-size: 0.875rem;
-    }
-
-    .collaborator-item:last-child { border-bottom: none; }
-    .collaborator-item:nth-child(even) { background: #fafafa; }
-
-    .collaborator-dni {
-      font-family: 'Courier New', monospace;
-      font-weight: 600;
-      color: #111;
-      font-size: 0.9rem;
-    }
-
-    .collaborator-pages {
-      color: #6b7280;
-      font-size: 0.8rem;
-    }
-
-    .collaborator-check {
-      color: #10b981;
-      font-size: 1rem;
-    }
-
-    /* Error list */
-    .error-section {
-      margin-top: 16px;
-      display: none;
-    }
-
-    .error-section.visible { display: block; }
-
-    .error-box {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      border-radius: 8px;
-      padding: 12px 16px;
-    }
-
-    .error-title {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #dc2626;
-      margin-bottom: 6px;
-    }
-
-    .error-list {
-      list-style: none;
-      font-size: 0.8rem;
-      color: #b91c1c;
-    }
-
-    .error-list li::before {
-      content: '• ';
-    }
-
-    /* Buttons */
-    .actions {
+    /* ── Firma ── */
+    .firma-toggle {
       margin-top: 24px;
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
+      gap: 10px;
       cursor: pointer;
-      border: none;
-      transition: opacity 0.15s, transform 0.1s;
+      user-select: none;
     }
+    .firma-toggle input[type="checkbox"] { width: 18px; height: 18px; accent-color: #6366f1; cursor: pointer; flex-shrink: 0; }
+    .firma-toggle-label { font-size: 0.9rem; font-weight: 600; color: #374151; }
 
+    .firma-upload {
+      display: none;
+      margin-top: 16px;
+      border: 2px dashed #d1d5db;
+      border-radius: 12px;
+      padding: 28px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      background: #fafafa;
+    }
+    .firma-upload.visible { display: block; }
+    .firma-upload:hover, .firma-upload.drag-over { border-color: #6366f1; background: #f5f3ff; }
+    .firma-upload input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .firma-icon { font-size: 2rem; margin-bottom: 8px; }
+    .firma-label { font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 4px; }
+    .firma-hint { font-size: 0.75rem; color: #9ca3af; }
+
+    .firma-preview {
+      display: none;
+      margin-top: 12px;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+    }
+    .firma-preview.visible { display: flex; }
+    .firma-preview img { height: 48px; max-width: 160px; object-fit: contain; border-radius: 4px; border: 1px solid #e5e7eb; background: #fff; }
+    .firma-preview-name { font-size: 0.8rem; color: #15803d; font-weight: 500; flex: 1; }
+    .firma-remove { background: none; border: none; cursor: pointer; color: #6b7280; font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
+    .firma-remove:hover { background: #fee2e2; color: #dc2626; }
+
+    /* ── Progress ── */
+    .progress-section { margin-top: 28px; display: none; }
+    .progress-section.visible { display: block; }
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; color: #374151; margin-bottom: 8px; font-weight: 500; }
+    .progress-bar-track { height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #818cf8); border-radius: 99px; width: 0%; transition: width 0.3s ease; }
+    .progress-status { font-size: 0.8rem; color: #6b7280; margin-top: 6px; }
+
+    /* ── Results ── */
+    .results-section { margin-top: 28px; display: none; }
+    .results-section.visible { display: block; }
+    .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .results-title { font-size: 1rem; font-weight: 600; color: #111; }
+    .badge { background: #ede9fe; color: #5b21b6; font-size: 0.75rem; font-weight: 600; padding: 2px 10px; border-radius: 99px; }
+    .collaborator-list { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; max-height: 320px; overflow-y: auto; }
+    .collaborator-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 0.875rem; }
+    .collaborator-item:last-child { border-bottom: none; }
+    .collaborator-item:nth-child(even) { background: #fafafa; }
+    .collaborator-dni { font-family: 'Courier New', monospace; font-weight: 600; color: #111; font-size: 0.9rem; }
+    .collaborator-pages { color: #6b7280; font-size: 0.8rem; }
+    .collaborator-check { color: #10b981; font-size: 1rem; }
+
+    .error-section { margin-top: 16px; display: none; }
+    .error-section.visible { display: block; }
+    .error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; }
+    .error-title { font-size: 0.85rem; font-weight: 600; color: #dc2626; margin-bottom: 6px; }
+    .error-list { list-style: none; font-size: 0.8rem; color: #b91c1c; }
+    .error-list li::before { content: '• '; }
+
+    .actions { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s, transform 0.1s; }
     .btn:active { transform: scale(0.97); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .btn-primary {
-      background: #6366f1;
-      color: #fff;
-    }
-
+    .btn-primary { background: #6366f1; color: #fff; }
     .btn-primary:hover:not(:disabled) { background: #4f46e5; }
-
-    .btn-secondary {
-      background: #f3f4f6;
-      color: #374151;
-      border: 1px solid #e5e7eb;
-    }
-
+    .btn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
     .btn-secondary:hover:not(:disabled) { background: #e5e7eb; }
 
-    /* Spinner */
     @keyframes spin { to { transform: rotate(360deg); } }
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
-
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
     .spinner.visible { display: block; }
   </style>
 </head>
@@ -285,6 +147,25 @@
     <div class="drop-icon">📄</div>
     <div class="drop-label">Arrastrá el PDF acá o hacé clic para buscarlo</div>
     <div class="drop-hint">Solo archivos PDF</div>
+  </div>
+
+  <!-- Firma del empleador -->
+  <label class="firma-toggle">
+    <input type="checkbox" id="firmaCheck" />
+    <span class="firma-toggle-label">✍️ Incluir firma del empleador</span>
+  </label>
+
+  <div class="firma-upload" id="firmaUpload">
+    <input type="file" accept="image/png,image/jpeg,image/jpg,application/pdf" id="firmaInput" />
+    <div class="firma-icon">🖊️</div>
+    <div class="firma-label">Subir firma del empleador</div>
+    <div class="firma-hint">JPG, PNG o PDF</div>
+  </div>
+
+  <div class="firma-preview" id="firmaPreview">
+    <img id="firmaPreviewImg" src="" alt="Vista previa de firma" />
+    <span class="firma-preview-name" id="firmaPreviewName"></span>
+    <button class="firma-remove" id="firmaRemove" title="Quitar firma">✕</button>
   </div>
 
   <div class="progress-section" id="progressSection">
@@ -323,7 +204,6 @@
 </div>
 
 <script>
-  // PDF.js worker
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -332,107 +212,173 @@
     /\bCUIL:?\s+\d{2}-(\d{7,8})-\d\b/,
   ];
 
+  // Textos que indican la zona de firma del empleador en el recibo
+  const FIRMA_TEXTS = ['firma del empleador', 'firma empleador'];
+
   // --- DOM refs ---
-  const dropZone     = document.getElementById('dropZone');
-  const fileInput    = document.getElementById('fileInput');
-  const progressSec  = document.getElementById('progressSection');
-  const progressText = document.getElementById('progressText');
-  const progressPct  = document.getElementById('progressPct');
-  const progressFill = document.getElementById('progressFill');
-  const progressStat = document.getElementById('progressStatus');
-  const resultsSec   = document.getElementById('resultsSection');
-  const countBadge   = document.getElementById('countBadge');
-  const collabList   = document.getElementById('collaboratorList');
-  const errorSec     = document.getElementById('errorSection');
-  const errorList    = document.getElementById('errorList');
-  const downloadBtn  = document.getElementById('downloadBtn');
-  const downloadLbl  = document.getElementById('downloadBtnLabel');
-  const dlSpinner    = document.getElementById('dlSpinner');
-  const resetBtn     = document.getElementById('resetBtn');
+  const dropZone         = document.getElementById('dropZone');
+  const fileInput        = document.getElementById('fileInput');
+  const firmaCheck       = document.getElementById('firmaCheck');
+  const firmaUpload      = document.getElementById('firmaUpload');
+  const firmaInput       = document.getElementById('firmaInput');
+  const firmaPreview     = document.getElementById('firmaPreview');
+  const firmaPreviewImg  = document.getElementById('firmaPreviewImg');
+  const firmaPreviewName = document.getElementById('firmaPreviewName');
+  const firmaRemove      = document.getElementById('firmaRemove');
+  const progressSec      = document.getElementById('progressSection');
+  const progressText     = document.getElementById('progressText');
+  const progressPct      = document.getElementById('progressPct');
+  const progressFill     = document.getElementById('progressFill');
+  const progressStat     = document.getElementById('progressStatus');
+  const resultsSec       = document.getElementById('resultsSection');
+  const countBadge       = document.getElementById('countBadge');
+  const collabList       = document.getElementById('collaboratorList');
+  const errorSec         = document.getElementById('errorSection');
+  const errorList        = document.getElementById('errorList');
+  const downloadBtn      = document.getElementById('downloadBtn');
+  const downloadLbl      = document.getElementById('downloadBtnLabel');
+  const dlSpinner        = document.getElementById('dlSpinner');
+  const resetBtn         = document.getElementById('resetBtn');
 
   // State
   let originalPdfBytes = null;
-  let dniMap = {};
-  let undetectedPages = [];
+  let dniMap           = {};
+  let undetectedPages  = [];
+  let firmaImageBytes  = null;
+  let firmaImageType   = null;
+  let firmaPositions   = {}; // pageIndex (0-based) -> {x, y, textHeight}
 
-  // --- Drag & drop ---
-  dropZone.addEventListener('dragover', e => {
-    e.preventDefault();
-    dropZone.classList.add('drag-over');
+  // ── Firma toggle ──
+  firmaCheck.addEventListener('change', () => {
+    firmaUpload.classList.toggle('visible', firmaCheck.checked);
+    if (!firmaCheck.checked) clearFirma();
   });
 
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  firmaInput.addEventListener('change', async () => {
+    if (firmaInput.files[0]) await loadFirma(firmaInput.files[0]);
+  });
 
-  dropZone.addEventListener('drop', e => {
+  firmaUpload.addEventListener('dragover', e => { e.preventDefault(); firmaUpload.classList.add('drag-over'); });
+  firmaUpload.addEventListener('dragleave', () => firmaUpload.classList.remove('drag-over'));
+  firmaUpload.addEventListener('drop', async e => {
     e.preventDefault();
-    dropZone.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type === 'application/pdf') handleFile(file);
+    firmaUpload.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) await loadFirma(e.dataTransfer.files[0]);
+  });
+
+  firmaRemove.addEventListener('click', clearFirma);
+
+  async function loadFirma(file) {
+    const valid = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+    if (!valid.includes(file.type)) { alert('La firma debe ser JPG, PNG o PDF.'); return; }
+
+    const bytes = new Uint8Array(await file.arrayBuffer());
+
+    if (file.type === 'application/pdf') {
+      // Renderizar primera página del PDF a PNG via canvas
+      try {
+        const pdfFirma = await pdfjsLib.getDocument({ data: bytes.slice(0) }).promise;
+        const pg = await pdfFirma.getPage(1);
+        const vp = pg.getViewport({ scale: 3 });
+        const canvas = document.createElement('canvas');
+        canvas.width = vp.width; canvas.height = vp.height;
+        await pg.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+        const dataUrl = canvas.toDataURL('image/png');
+        firmaImageBytes = Uint8Array.from(atob(dataUrl.split(',')[1]), c => c.charCodeAt(0));
+        firmaImageType  = 'image/png';
+        firmaPreviewImg.src = dataUrl;
+      } catch(e) { alert('No se pudo procesar el PDF de firma: ' + e.message); return; }
+    } else {
+      firmaImageBytes = bytes;
+      firmaImageType  = (file.type === 'image/jpg') ? 'image/jpeg' : file.type;
+      firmaPreviewImg.src = URL.createObjectURL(new Blob([bytes], { type: firmaImageType }));
+    }
+
+    firmaPreviewName.textContent = file.name;
+    firmaPreview.classList.add('visible');
+    firmaUpload.style.display = 'none';
+  }
+
+  function clearFirma() {
+    firmaImageBytes = null; firmaImageType = null;
+    firmaPreviewImg.src = ''; firmaPreviewName.textContent = '';
+    firmaPreview.classList.remove('visible');
+    firmaInput.value = '';
+    if (firmaCheck.checked) firmaUpload.style.display = 'block';
+  }
+
+  // ── PDF drop ──
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault(); dropZone.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type === 'application/pdf') handleFile(f);
     else alert('Por favor sube un archivo PDF.');
   });
 
-  fileInput.addEventListener('change', () => {
-    if (fileInput.files[0]) handleFile(fileInput.files[0]);
-  });
-
+  fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
   resetBtn.addEventListener('click', reset);
   downloadBtn.addEventListener('click', generateAndDownloadZip);
 
-  // --- Core ---
+  // ── Core ──
   async function handleFile(file) {
     reset(false);
-originalPdfBytes = new Uint8Array(await file.arrayBuffer());
+    originalPdfBytes = new Uint8Array(await file.arrayBuffer());
     showProgress(true);
     setProgress(0, 'Leyendo PDF...');
 
     let pdfDoc;
     try {
-      // .slice(0) hace una copia del buffer para que pdf.js no lo consuma
       pdfDoc = await pdfjsLib.getDocument({ data: originalPdfBytes.slice(0) }).promise;
     } catch(e) {
       alert('No se pudo leer el PDF. Asegurate de que no esté protegido con contraseña.');
-      showProgress(false);
-      return;
+      showProgress(false); return;
     }
 
     const totalPages = pdfDoc.numPages;
-    dniMap = {};
-    undetectedPages = [];
+    dniMap = {}; undetectedPages = []; firmaPositions = {};
 
     for (let i = 1; i <= totalPages; i++) {
-      setProgress(
-        Math.round((i / totalPages) * 80),
-        `Analizando página ${i} de ${totalPages}...`
-      );
+      setProgress(Math.round((i / totalPages) * 80), `Analizando página ${i} de ${totalPages}...`);
 
-      const page = await pdfDoc.getPage(i);
+      const page        = await pdfDoc.getPage(i);
       const textContent = await page.getTextContent();
-      const pageText = textContent.items.map(it => it.str).join(' ');
-      const dni = extractDni(pageText);
+      const items       = textContent.items;
+      const pageText    = items.map(it => it.str).join(' ');
 
+      // DNI
+      const dni = extractDni(pageText);
       if (dni) {
         if (!dniMap[dni]) dniMap[dni] = [];
-        dniMap[dni].push(i - 1); // 0-based for pdf-lib
+        dniMap[dni].push(i - 1);
       } else {
         undetectedPages.push(i);
+      }
+
+      // Posición de firma: buscar texto "firma del empleador" en los items
+      for (const item of items) {
+        const txt = item.str.toLowerCase().trim();
+        if (FIRMA_TEXTS.some(f => txt.includes(f))) {
+          // transform[4] = x, transform[5] = y en coords PDF (origen abajo-izquierda)
+          firmaPositions[i - 1] = {
+            x:          item.transform[4],
+            y:          item.transform[5],
+            textHeight: Math.abs(item.transform[3]) || 10,
+          };
+          break;
+        }
       }
     }
 
     setProgress(90, 'Organizando resultados...');
     renderResults();
     setProgress(100, 'Listo.');
-
-    setTimeout(() => {
-      showProgress(false);
-      resultsSec.classList.add('visible');
-    }, 400);
+    setTimeout(() => { showProgress(false); resultsSec.classList.add('visible'); }, 400);
   }
 
   function extractDni(text) {
-    for (const pattern of DNI_PATTERNS) {
-      const m = text.match(pattern);
-      if (m) return m[1];
-    }
+    for (const p of DNI_PATTERNS) { const m = text.match(p); if (m) return m[1]; }
     return null;
   }
 
@@ -440,7 +386,6 @@ originalPdfBytes = new Uint8Array(await file.arrayBuffer());
     const dnis = Object.keys(dniMap).sort();
     countBadge.textContent = dnis.length;
     collabList.innerHTML = '';
-
     for (const dni of dnis) {
       const pages = dniMap[dni];
       const item = document.createElement('div');
@@ -448,16 +393,12 @@ originalPdfBytes = new Uint8Array(await file.arrayBuffer());
       item.innerHTML = `
         <span class="collaborator-dni">${dni}</span>
         <span class="collaborator-pages">${pages.length} página${pages.length !== 1 ? 's' : ''}</span>
-        <span class="collaborator-check">✓</span>
-      `;
+        <span class="collaborator-check">✓</span>`;
       collabList.appendChild(item);
     }
-
     if (undetectedPages.length > 0) {
       errorSec.classList.add('visible');
-      errorList.innerHTML = undetectedPages
-        .map(p => `<li>Página ${p}: no se encontró DNI</li>`)
-        .join('');
+      errorList.innerHTML = undetectedPages.map(p => `<li>Página ${p}: no se encontró DNI</li>`).join('');
     }
   }
 
@@ -466,39 +407,67 @@ originalPdfBytes = new Uint8Array(await file.arrayBuffer());
     dlSpinner.classList.add('visible');
     downloadLbl.textContent = 'Generando ZIP...';
 
+    const usarFirma = firmaCheck.checked && firmaImageBytes !== null;
+
     try {
       const { PDFDocument } = PDFLib;
-      // Usar el buffer original intacto (pdf.js usó una copia)
       const srcDoc = await PDFDocument.load(originalPdfBytes);
-
-      const zip = new JSZip();
-      const dnis = Object.keys(dniMap).sort();
+      const zip    = new JSZip();
+      const dnis   = Object.keys(dniMap).sort();
 
       for (let i = 0; i < dnis.length; i++) {
-        const dni = dnis[i];
+        const dni      = dnis[i];
         const pageIdxs = dniMap[dni];
-
         downloadLbl.textContent = `Generando ${i + 1} / ${dnis.length}...`;
 
         const newDoc = await PDFDocument.create();
         const copied = await newDoc.copyPages(srcDoc, pageIdxs);
-        for (const page of copied) newDoc.addPage(page);
+        for (const pg of copied) newDoc.addPage(pg);
 
-        const pdfBytes = await newDoc.save();
-        zip.file(`${dni}.pdf`, pdfBytes);
+        if (usarFirma) {
+          // Embeder imagen en este documento
+          const embImg = firmaImageType === 'image/png'
+            ? await newDoc.embedPng(firmaImageBytes)
+            : await newDoc.embedJpg(firmaImageBytes);
+
+          const pages = newDoc.getPages();
+          for (let pi = 0; pi < pages.length; pi++) {
+            const origIdx = pageIdxs[pi];
+            const pdfPage = pages[pi];
+            const { width, height } = pdfPage.getSize();
+
+            // Tamaño de firma: 18% del ancho de página, proporcional en altura
+            const fw = width * 0.18;
+            const fh = fw * (embImg.height / embImg.width);
+
+            const pos = firmaPositions[origIdx];
+            let x, y;
+
+            if (pos) {
+              // Colocar la imagen justo encima del texto "Firma del empleador"
+              x = pos.x;
+              y = pos.y + pos.textHeight + 2;
+            } else {
+              // Fallback: abajo a la izquierda
+              x = width * 0.05;
+              y = height * 0.06;
+            }
+
+            pdfPage.drawImage(embImg, { x, y, width: fw, height: fh, opacity: 0.92 });
+          }
+        }
+
+        zip.file(`${dni}.pdf`, await newDoc.save());
       }
 
       downloadLbl.textContent = 'Comprimiendo...';
       const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE' });
-
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'recibos.zip';
-      a.click();
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = 'recibos.zip'; a.click();
       setTimeout(() => URL.revokeObjectURL(url), 10000);
-
       downloadLbl.textContent = '✅ ZIP descargado';
+
     } catch(e) {
       console.error(e);
       alert('Error al generar el ZIP: ' + e.message);
@@ -511,24 +480,18 @@ originalPdfBytes = new Uint8Array(await file.arrayBuffer());
 
   function setProgress(pct, status) {
     progressFill.style.width = pct + '%';
-    progressPct.textContent = pct + '%';
+    progressPct.textContent  = pct + '%';
     if (status) progressStat.textContent = status;
   }
 
   function showProgress(show) {
     progressSec.classList.toggle('visible', show);
-    if (show) {
-      progressText.textContent = 'Procesando PDF...';
-      setProgress(0, '');
-    }
+    if (show) { progressText.textContent = 'Procesando PDF...'; setProgress(0, ''); }
   }
 
   function reset(showDropZone = true) {
-    dniMap = {};
-    undetectedPages = [];
-    originalPdfBytes = null;
-    collabList.innerHTML = '';
-    errorList.innerHTML = '';
+    dniMap = {}; undetectedPages = []; originalPdfBytes = null; firmaPositions = {};
+    collabList.innerHTML = ''; errorList.innerHTML = '';
     errorSec.classList.remove('visible');
     resultsSec.classList.remove('visible');
     showProgress(false);
