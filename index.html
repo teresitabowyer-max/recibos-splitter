@@ -28,7 +28,6 @@
     }
     h1 { font-size: 1.5rem; font-weight: 700; color: #111; margin-bottom: 6px; }
     .subtitle { color: #6b7280; font-size: 0.9rem; margin-bottom: 32px; }
-
     .drop-zone {
       border: 2px dashed #d1d5db;
       border-radius: 12px;
@@ -43,19 +42,9 @@
     .drop-icon { font-size: 2.5rem; margin-bottom: 12px; }
     .drop-label { font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 4px; }
     .drop-hint { font-size: 0.8rem; color: #9ca3af; }
-
-    /* Firma */
-    .firma-toggle {
-      margin-top: 24px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      user-select: none;
-    }
+    .firma-toggle { margin-top: 24px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
     .firma-toggle input[type="checkbox"] { width: 18px; height: 18px; accent-color: #6366f1; cursor: pointer; flex-shrink: 0; }
     .firma-toggle-label { font-size: 0.9rem; font-weight: 600; color: #374151; }
-
     .firma-upload {
       display: none;
       margin-top: 16px;
@@ -74,32 +63,18 @@
     .firma-icon { font-size: 2rem; margin-bottom: 8px; }
     .firma-label { font-size: 0.9rem; font-weight: 600; color: #374151; margin-bottom: 4px; }
     .firma-hint { font-size: 0.75rem; color: #9ca3af; }
-
-    .firma-preview {
-      display: none;
-      margin-top: 12px;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: 8px;
-    }
+    .firma-preview { display: none; margin-top: 12px; align-items: center; gap: 12px; padding: 10px 14px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; }
     .firma-preview.visible { display: flex; }
     .firma-preview img { height: 48px; max-width: 160px; object-fit: contain; border-radius: 4px; border: 1px solid #e5e7eb; background: #fff; }
     .firma-preview-name { font-size: 0.8rem; color: #15803d; font-weight: 500; flex: 1; }
     .firma-remove { background: none; border: none; cursor: pointer; color: #6b7280; font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
     .firma-remove:hover { background: #fee2e2; color: #dc2626; }
-
-    /* Progress */
     .progress-section { margin-top: 28px; display: none; }
     .progress-section.visible { display: block; }
     .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; color: #374151; margin-bottom: 8px; font-weight: 500; }
     .progress-bar-track { height: 8px; background: #e5e7eb; border-radius: 99px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #818cf8); border-radius: 99px; width: 0%; transition: width 0.3s ease; }
     .progress-status { font-size: 0.8rem; color: #6b7280; margin-top: 6px; }
-
-    /* Results */
     .results-section { margin-top: 28px; display: none; }
     .results-section.visible { display: block; }
     .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
@@ -112,14 +87,12 @@
     .collaborator-dni { font-family: 'Courier New', monospace; font-weight: 600; color: #111; font-size: 0.9rem; }
     .collaborator-pages { color: #6b7280; font-size: 0.8rem; }
     .collaborator-check { color: #10b981; font-size: 1rem; }
-
     .error-section { margin-top: 16px; display: none; }
     .error-section.visible { display: block; }
     .error-box { background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 12px 16px; }
     .error-title { font-size: 0.85rem; font-weight: 600; color: #dc2626; margin-bottom: 6px; }
     .error-list { list-style: none; font-size: 0.8rem; color: #b91c1c; }
     .error-list li::before { content: '• '; }
-
     .actions { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
     .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s, transform 0.1s; }
     .btn:active { transform: scale(0.97); }
@@ -128,7 +101,6 @@
     .btn-primary:hover:not(:disabled) { background: #4f46e5; }
     .btn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb; }
     .btn-secondary:hover:not(:disabled) { background: #e5e7eb; }
-
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
     .spinner.visible { display: block; }
@@ -181,14 +153,12 @@
       <div class="badge" id="countBadge">0</div>
     </div>
     <div class="collaborator-list" id="collaboratorList"></div>
-
     <div class="error-section" id="errorSection">
       <div class="error-box">
         <div class="error-title">⚠️ Páginas sin DNI detectado</div>
         <ul class="error-list" id="errorList"></ul>
       </div>
     </div>
-
     <div class="actions">
       <button class="btn btn-primary" id="downloadBtn">
         <span class="spinner" id="dlSpinner"></span>
@@ -208,15 +178,6 @@
     /\bCUIL:?\s+\d{2}-(\d{7,8})-\d\b/,
   ];
 
-  // Textos exactos que aparecen en el recibo para la zona de firma del empleador
-  // Se busca como substring en minúsculas del texto de cada item
-  const FIRMA_KEYWORDS = [
-    'firma autorizada del empleador',
-    'firma del empleador',
-    'firma empleador',
-  ];
-
-  // --- DOM refs ---
   const dropZone         = document.getElementById('dropZone');
   const fileInput        = document.getElementById('fileInput');
   const firmaCheck       = document.getElementById('firmaCheck');
@@ -241,13 +202,12 @@
   const dlSpinner        = document.getElementById('dlSpinner');
   const resetBtn         = document.getElementById('resetBtn');
 
-  // State
   let originalPdfBytes = null;
   let dniMap           = {};
   let undetectedPages  = [];
   let firmaImageBytes  = null;
   let firmaImageType   = null;
-  // pageIndex (0-based) -> { x, y } en coordenadas PDF (origen abajo-izquierda)
+  // pageIndex (0-based) -> { x, y, width } en coordenadas pdf-lib (origen abajo-izquierda)
   let firmaPositions   = {};
 
   // ── Firma toggle ──
@@ -270,7 +230,6 @@
     const valid = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
     if (!valid.includes(file.type)) { alert('La firma debe ser JPG, PNG o PDF.'); return; }
     const bytes = new Uint8Array(await file.arrayBuffer());
-
     if (file.type === 'application/pdf') {
       try {
         const pdfFirma = await pdfjsLib.getDocument({ data: bytes.slice(0) }).promise;
@@ -289,7 +248,6 @@
       firmaImageType  = file.type === 'image/jpg' ? 'image/jpeg' : file.type;
       firmaPreviewImg.src = URL.createObjectURL(new Blob([bytes], { type: firmaImageType }));
     }
-
     firmaPreviewName.textContent = file.name;
     firmaPreview.classList.add('visible');
     firmaUpload.style.display = 'none';
@@ -338,12 +296,13 @@
       setProgress(Math.round((i / totalPages) * 80), `Analizando página ${i} de ${totalPages}...`);
 
       const page        = await pdfDoc.getPage(i);
+      const viewport    = page.getViewport({ scale: 1 });
+      const pageHeight  = viewport.height; // altura en puntos (ej: 841)
       const textContent = await page.getTextContent();
       const items       = textContent.items;
+      const pageText    = items.map(it => it.str).join(' ');
 
-      // ── Detectar DNI ──
-      // Concatenamos todo el texto para el matching de DNI
-      const pageText = items.map(it => it.str).join(' ');
+      // ── DNI ──
       const dni = extractDni(pageText);
       if (dni) {
         if (!dniMap[dni]) dniMap[dni] = [];
@@ -352,59 +311,65 @@
         undetectedPages.push(i);
       }
 
-      // ── Detectar posición de "FIRMA AUTORIZADA DEL EMPLEADOR" ──
-      // Los PDFs con texto separado por items necesitan concatenar items cercanos
-      // Buscamos en texto completo primero, y usamos la posición del item que matchea
-      const fullText = items.map(it => it.str).join(' ').toLowerCase();
-      const foundKeyword = FIRMA_KEYWORDS.find(k => fullText.includes(k));
+      // ── Posición de firma ──
+      // Buscamos la línea de puntos (......) que está justo ENCIMA del texto "FIRMA AUTORIZADA DEL EMPLEADOR"
+      // pdf.js usa coordenadas con origen ARRIBA-izquierda (top = distancia desde arriba)
+      // pdf-lib usa coordenadas con origen ABAJO-izquierda (y = distancia desde abajo)
+      // Conversión: y_pdflib = pageHeight - top_pdfjs
+      //
+      // De los datos reales del PDF:
+      //   línea de puntos: top entre ~400 y ~434 (variable según página)
+      //   texto FIRMA: top = puntos_top + ~9px
+      //
+      // Estrategia: buscar el item que es la línea de puntos (texto tipo ".....")
+      // y también buscar "FIRMA" para confirmar que es la zona correcta (la del empleador, derecha)
+      // La línea de puntos del empleador tiene x0 > 400 (está a la derecha)
 
-      if (foundKeyword) {
-        // Buscar el item individual que contenga la mayor parte del texto de la firma
-        // o el conjunto de items que forman la frase
-        let bestItem = null;
-        let bestScore = 0;
+      let puntosTop  = null;  // top en coords pdfjs
+      let puntosX0   = null;  // x inicio de los puntos
+      let puntosX1   = null;  // x fin de los puntos
 
-        // Reconstruir texto acumulado item por item para encontrar la posición exacta
-        for (let j = 0; j < items.length; j++) {
-          const item = items[j];
-          const txt = item.str.toLowerCase().trim();
-          if (!txt) continue;
-
-          // Puntaje: cuántas palabras de la keyword aparecen en este item
-          const keyWords = foundKeyword.split(' ');
-          const score = keyWords.filter(w => txt.includes(w)).length;
-          if (score > bestScore) {
-            bestScore = score;
-            bestItem = item;
-          }
-
-          // También intentar ventana deslizante de hasta 5 items concatenados
-          if (j + 1 < items.length) {
-            const combined = items.slice(j, Math.min(j + 5, items.length))
-              .map(it => it.str).join(' ').toLowerCase();
-            if (combined.includes(foundKeyword)) {
-              bestItem = item; // anclar al primer item de la cadena
-              bestScore = 999;
-              break;
-            }
+      for (const item of items) {
+        const txt = item.str.trim();
+        // La línea de puntos tiene muchos puntos y está a la derecha (x > 400)
+        if (/^\.{5,}$/.test(txt)) {
+          // transform[4]=x, transform[5]=y en coords pdfjs (y desde abajo del canvas pdfjs)
+          // Pero pdfjs items tienen transform donde [5] es y desde ABAJO de la página
+          // Sin embargo extract_words de pdfplumber usa top desde arriba
+          // En pdfjs: y desde abajo = transform[5], top_desde_arriba = pageHeight - transform[5] - fontSize
+          const xPos = item.transform[4];
+          if (xPos > 400) { // solo los puntos de la derecha (empleador)
+            // Convertir a top-desde-arriba para comparar con pdfplumber
+            // En pdfjs transform[5] es la baseline (y desde abajo de la página)
+            const yBaseline = item.transform[5]; // y desde abajo
+            puntosTop = pageHeight - yBaseline;  // top desde arriba (aprox)
+            puntosX0  = xPos;
+            puntosX1  = item.transform[4] + (item.width || 100);
+            break;
           }
         }
+      }
 
-        if (bestItem) {
-          // transform[4] = x, transform[5] = y en coords PDF (origen abajo-izquierda)
-          const x = bestItem.transform[4];
-          const y = bestItem.transform[5];
-          const textH = Math.abs(bestItem.transform[3]) || 10;
+      if (puntosTop !== null) {
+        // La firma debe quedar ENCIMA de la línea de puntos
+        // firmaHeight lo calcularemos al embedder la imagen, usamos ~35pt de alto estimado
+        // Dejamos un margen de 5pt encima de los puntos
+        const firmaHeight = 35; // altura estimada en puntos
+        const margen = 5;       // espacio entre firma y línea de puntos
 
-          // La firma va ENCIMA de la línea de puntos que está encima del texto.
-          // Estimamos que la línea punteada está ~textH * 1.5 por encima del texto.
-          // Así que subimos la imagen un poco más para quedar sobre la línea punteada.
-          firmaPositions[i - 1] = {
-            x:     x,
-            // Posición final: encima de la línea de puntos (~2.5 alturas de texto por encima del label)
-            y:     y + textH * 2.5,
-          };
-        }
+        // y en pdf-lib (origen abajo): top_puntos_pdfjs -> y_pdflib = pageHeight - puntosTop
+        // La firma va ENCIMA de los puntos, así que su borde inferior está en y_pdflib_puntos + margen
+        const yPuntosPdflib = pageHeight - puntosTop; // y de la línea de puntos en pdf-lib
+        const yFirma = yPuntosPdflib + margen;        // base de la firma = encima de los puntos
+
+        // Ancho: desde x0 de los puntos hasta x1
+        const anchoZona = (puntosX1 - puntosX0) || 115;
+
+        firmaPositions[i - 1] = {
+          x:     puntosX0,
+          y:     yFirma,
+          w:     anchoZona,
+        };
       }
     }
 
@@ -469,18 +434,17 @@
           const pages = newDoc.getPages();
           for (let pi = 0; pi < pages.length; pi++) {
             const origIdx = pageIdxs[pi];
-            const pdfPage = pages[pi];
-            const { width, height } = pdfPage.getSize();
             const pos = firmaPositions[origIdx];
+            if (!pos) continue; // no hay zona de firma en esta página
 
-            if (!pos) continue; // Si no se encontró el texto de firma, no insertar
+            const pdfPage = pages[pi];
 
-            // Tamaño de la firma: 20% del ancho de la página, proporcional en alto
-            const fw = width * 0.20;
+            // Calcular dimensiones manteniendo proporción, ajustado al ancho de la zona
+            const fw = pos.w;
             const fh = fw * (embImg.height / embImg.width);
 
-            // Colocar la imagen centrada horizontalmente sobre la zona de firma,
-            // anclada a la posición X del texto detectado
+            // Dibujar la imagen: x=inicio de los puntos, y=encima de los puntos
+            // y en pdf-lib es el borde INFERIOR de la imagen
             pdfPage.drawImage(embImg, {
               x:      pos.x,
               y:      pos.y,
