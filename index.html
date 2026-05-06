@@ -9,7 +9,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: #f0f2f5;
@@ -19,7 +18,6 @@
       justify-content: center;
       padding: 40px 16px;
     }
-
     .card {
       background: #fff;
       border-radius: 16px;
@@ -28,7 +26,6 @@
       width: 100%;
       max-width: 680px;
     }
-
     h1 { font-size: 1.5rem; font-weight: 700; color: #111; margin-bottom: 6px; }
     .subtitle { color: #6b7280; font-size: 0.9rem; margin-bottom: 32px; }
 
@@ -47,7 +44,7 @@
     .drop-label { font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 4px; }
     .drop-hint { font-size: 0.8rem; color: #9ca3af; }
 
-    /* ── Firma ── */
+    /* Firma */
     .firma-toggle {
       margin-top: 24px;
       display: flex;
@@ -94,7 +91,7 @@
     .firma-remove { background: none; border: none; cursor: pointer; color: #6b7280; font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
     .firma-remove:hover { background: #fee2e2; color: #dc2626; }
 
-    /* ── Progress ── */
+    /* Progress */
     .progress-section { margin-top: 28px; display: none; }
     .progress-section.visible { display: block; }
     .progress-label { display: flex; justify-content: space-between; font-size: 0.85rem; color: #374151; margin-bottom: 8px; font-weight: 500; }
@@ -102,7 +99,7 @@
     .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #818cf8); border-radius: 99px; width: 0%; transition: width 0.3s ease; }
     .progress-status { font-size: 0.8rem; color: #6b7280; margin-top: 6px; }
 
-    /* ── Results ── */
+    /* Results */
     .results-section { margin-top: 28px; display: none; }
     .results-section.visible { display: block; }
     .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
@@ -149,7 +146,6 @@
     <div class="drop-hint">Solo archivos PDF</div>
   </div>
 
-  <!-- Firma del empleador -->
   <label class="firma-toggle">
     <input type="checkbox" id="firmaCheck" />
     <span class="firma-toggle-label">✍️ Incluir firma del empleador</span>
@@ -212,8 +208,13 @@
     /\bCUIL:?\s+\d{2}-(\d{7,8})-\d\b/,
   ];
 
-  // Textos que indican la zona de firma del empleador en el recibo
-  const FIRMA_TEXTS = ['firma del empleador', 'firma empleador'];
+  // Textos exactos que aparecen en el recibo para la zona de firma del empleador
+  // Se busca como substring en minúsculas del texto de cada item
+  const FIRMA_KEYWORDS = [
+    'firma autorizada del empleador',
+    'firma del empleador',
+    'firma empleador',
+  ];
 
   // --- DOM refs ---
   const dropZone         = document.getElementById('dropZone');
@@ -246,36 +247,31 @@
   let undetectedPages  = [];
   let firmaImageBytes  = null;
   let firmaImageType   = null;
-  let firmaPositions   = {}; // pageIndex (0-based) -> {x, y, textHeight}
+  // pageIndex (0-based) -> { x, y } en coordenadas PDF (origen abajo-izquierda)
+  let firmaPositions   = {};
 
   // ── Firma toggle ──
   firmaCheck.addEventListener('change', () => {
     firmaUpload.classList.toggle('visible', firmaCheck.checked);
     if (!firmaCheck.checked) clearFirma();
   });
-
   firmaInput.addEventListener('change', async () => {
     if (firmaInput.files[0]) await loadFirma(firmaInput.files[0]);
   });
-
   firmaUpload.addEventListener('dragover', e => { e.preventDefault(); firmaUpload.classList.add('drag-over'); });
   firmaUpload.addEventListener('dragleave', () => firmaUpload.classList.remove('drag-over'));
   firmaUpload.addEventListener('drop', async e => {
-    e.preventDefault();
-    firmaUpload.classList.remove('drag-over');
+    e.preventDefault(); firmaUpload.classList.remove('drag-over');
     if (e.dataTransfer.files[0]) await loadFirma(e.dataTransfer.files[0]);
   });
-
   firmaRemove.addEventListener('click', clearFirma);
 
   async function loadFirma(file) {
     const valid = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
     if (!valid.includes(file.type)) { alert('La firma debe ser JPG, PNG o PDF.'); return; }
-
     const bytes = new Uint8Array(await file.arrayBuffer());
 
     if (file.type === 'application/pdf') {
-      // Renderizar primera página del PDF a PNG via canvas
       try {
         const pdfFirma = await pdfjsLib.getDocument({ data: bytes.slice(0) }).promise;
         const pg = await pdfFirma.getPage(1);
@@ -290,7 +286,7 @@
       } catch(e) { alert('No se pudo procesar el PDF de firma: ' + e.message); return; }
     } else {
       firmaImageBytes = bytes;
-      firmaImageType  = (file.type === 'image/jpg') ? 'image/jpeg' : file.type;
+      firmaImageType  = file.type === 'image/jpg' ? 'image/jpeg' : file.type;
       firmaPreviewImg.src = URL.createObjectURL(new Blob([bytes], { type: firmaImageType }));
     }
 
@@ -316,7 +312,6 @@
     if (f && f.type === 'application/pdf') handleFile(f);
     else alert('Por favor sube un archivo PDF.');
   });
-
   fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
   resetBtn.addEventListener('click', reset);
   downloadBtn.addEventListener('click', generateAndDownloadZip);
@@ -345,9 +340,10 @@
       const page        = await pdfDoc.getPage(i);
       const textContent = await page.getTextContent();
       const items       = textContent.items;
-      const pageText    = items.map(it => it.str).join(' ');
 
-      // DNI
+      // ── Detectar DNI ──
+      // Concatenamos todo el texto para el matching de DNI
+      const pageText = items.map(it => it.str).join(' ');
       const dni = extractDni(pageText);
       if (dni) {
         if (!dniMap[dni]) dniMap[dni] = [];
@@ -356,17 +352,58 @@
         undetectedPages.push(i);
       }
 
-      // Posición de firma: buscar texto "firma del empleador" en los items
-      for (const item of items) {
-        const txt = item.str.toLowerCase().trim();
-        if (FIRMA_TEXTS.some(f => txt.includes(f))) {
+      // ── Detectar posición de "FIRMA AUTORIZADA DEL EMPLEADOR" ──
+      // Los PDFs con texto separado por items necesitan concatenar items cercanos
+      // Buscamos en texto completo primero, y usamos la posición del item que matchea
+      const fullText = items.map(it => it.str).join(' ').toLowerCase();
+      const foundKeyword = FIRMA_KEYWORDS.find(k => fullText.includes(k));
+
+      if (foundKeyword) {
+        // Buscar el item individual que contenga la mayor parte del texto de la firma
+        // o el conjunto de items que forman la frase
+        let bestItem = null;
+        let bestScore = 0;
+
+        // Reconstruir texto acumulado item por item para encontrar la posición exacta
+        for (let j = 0; j < items.length; j++) {
+          const item = items[j];
+          const txt = item.str.toLowerCase().trim();
+          if (!txt) continue;
+
+          // Puntaje: cuántas palabras de la keyword aparecen en este item
+          const keyWords = foundKeyword.split(' ');
+          const score = keyWords.filter(w => txt.includes(w)).length;
+          if (score > bestScore) {
+            bestScore = score;
+            bestItem = item;
+          }
+
+          // También intentar ventana deslizante de hasta 5 items concatenados
+          if (j + 1 < items.length) {
+            const combined = items.slice(j, Math.min(j + 5, items.length))
+              .map(it => it.str).join(' ').toLowerCase();
+            if (combined.includes(foundKeyword)) {
+              bestItem = item; // anclar al primer item de la cadena
+              bestScore = 999;
+              break;
+            }
+          }
+        }
+
+        if (bestItem) {
           // transform[4] = x, transform[5] = y en coords PDF (origen abajo-izquierda)
+          const x = bestItem.transform[4];
+          const y = bestItem.transform[5];
+          const textH = Math.abs(bestItem.transform[3]) || 10;
+
+          // La firma va ENCIMA de la línea de puntos que está encima del texto.
+          // Estimamos que la línea punteada está ~textH * 1.5 por encima del texto.
+          // Así que subimos la imagen un poco más para quedar sobre la línea punteada.
           firmaPositions[i - 1] = {
-            x:          item.transform[4],
-            y:          item.transform[5],
-            textHeight: Math.abs(item.transform[3]) || 10,
+            x:     x,
+            // Posición final: encima de la línea de puntos (~2.5 alturas de texto por encima del label)
+            y:     y + textH * 2.5,
           };
-          break;
         }
       }
     }
@@ -425,7 +462,6 @@
         for (const pg of copied) newDoc.addPage(pg);
 
         if (usarFirma) {
-          // Embeder imagen en este documento
           const embImg = firmaImageType === 'image/png'
             ? await newDoc.embedPng(firmaImageBytes)
             : await newDoc.embedJpg(firmaImageBytes);
@@ -435,25 +471,23 @@
             const origIdx = pageIdxs[pi];
             const pdfPage = pages[pi];
             const { width, height } = pdfPage.getSize();
+            const pos = firmaPositions[origIdx];
 
-            // Tamaño de firma: 18% del ancho de página, proporcional en altura
-            const fw = width * 0.18;
+            if (!pos) continue; // Si no se encontró el texto de firma, no insertar
+
+            // Tamaño de la firma: 20% del ancho de la página, proporcional en alto
+            const fw = width * 0.20;
             const fh = fw * (embImg.height / embImg.width);
 
-            const pos = firmaPositions[origIdx];
-            let x, y;
-
-            if (pos) {
-              // Colocar la imagen justo encima del texto "Firma del empleador"
-              x = pos.x;
-              y = pos.y + pos.textHeight + 2;
-            } else {
-              // Fallback: abajo a la izquierda
-              x = width * 0.05;
-              y = height * 0.06;
-            }
-
-            pdfPage.drawImage(embImg, { x, y, width: fw, height: fh, opacity: 0.92 });
+            // Colocar la imagen centrada horizontalmente sobre la zona de firma,
+            // anclada a la posición X del texto detectado
+            pdfPage.drawImage(embImg, {
+              x:      pos.x,
+              y:      pos.y,
+              width:  fw,
+              height: fh,
+              opacity: 1,
+            });
           }
         }
 
