@@ -291,36 +291,45 @@
       // Estrategia: recolectar TODAS las líneas de puntos con x > 400,
       // quedarnos con la que tiene el MAYOR top (más abajo en la página).
 
-      const lineasPuntos = []; // { x0, x1, yBaseline, topDesdeArriba }
+      // Recolectar todas las líneas de puntos y todos los textos con su posición Y
+      const lineasPuntos = []; // { x0, x1, yBaseline }
+      const textItems    = []; // { text, yBaseline }
 
       for (const item of items) {
         const txt = item.str.trim();
-        // Línea de puntos: 5 o más puntos consecutivos
+        if (!txt) continue;
         if (/^\.{5,}$/.test(txt)) {
-          const x0 = item.transform[4];
-          if (x0 > 400) { // solo las de la derecha
-            const yBaseline      = item.transform[5];
-            const topDesdeArriba = pageHeight - yBaseline;
-            const x1             = x0 + (item.width || 115);
-            lineasPuntos.push({ x0, x1, yBaseline, topDesdeArriba });
-          }
+          lineasPuntos.push({
+            x0:        item.transform[4],
+            x1:        item.transform[4] + (item.width || 115),
+            yBaseline: item.transform[5],
+          });
+        } else {
+          textItems.push({
+            text:      txt.toLowerCase(),
+            yBaseline: item.transform[5],
+          });
         }
       }
 
-      if (lineasPuntos.length > 0) {
-        // La firma del EMPLEADOR es siempre la línea de puntos más abajo en la página
-        // = la que tiene mayor topDesdeArriba = la que tiene menor yBaseline (en coords pdfjs)
-        lineasPuntos.sort((a, b) => b.topDesdeArriba - a.topDesdeArriba);
-        const lineaEmpleador = lineasPuntos[0];
+      // Buscar la línea de puntos que tenga "firma" y "empleador" en el texto
+      // que aparece DEBAJO de ella (menor yBaseline, dentro de 30 puntos)
+      let lineaEmpleador = null;
+      for (const lp of lineasPuntos) {
+        const textoAbajo = textItems
+          .filter(t => t.yBaseline < lp.yBaseline && t.yBaseline > lp.yBaseline - 30)
+          .map(t => t.text)
+          .join(' ');
+        if (textoAbajo.includes('firma') && textoAbajo.includes('empleador')) {
+          lineaEmpleador = lp;
+          break;
+        }
+      }
 
-        // Convertir a coordenadas pdf-lib (origen abajo-izquierda):
-        // y_pdflib = yBaseline (ya está en coords desde abajo en pdfjs)
-        // La firma va ENCIMA de la línea de puntos:
-        // el borde inferior de la imagen = yBaseline + pequeño margen
-        const margen = 3; // puntos de espacio entre la imagen y la línea
+      if (lineaEmpleador) {
         firmaPositions[i - 1] = {
           x: lineaEmpleador.x0,
-          y: lineaEmpleador.yBaseline + margen, // borde inferior de la imagen en pdf-lib
+          y: lineaEmpleador.yBaseline + 3,
           w: lineaEmpleador.x1 - lineaEmpleador.x0,
         };
       }
